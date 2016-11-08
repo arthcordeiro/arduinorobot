@@ -38,9 +38,7 @@ long dist; //Variável de distância
  P -> Parar
  E -> e
  D -> d
- Gd -> Girar d
- Ge -> Girar e
- Gb -> Girar 180°
+ G -> Girar 180
  */
 
 void setup() {
@@ -208,5 +206,27 @@ void automatico(){
 }
 
 void manual(){
-  
+
+  unsigned char com;
+
+  com = Serial.read();
+  switch(com){
+    case 'F':
+      andar();
+      break;
+    case 'D':
+      toRight();
+      break;
+    case 'E':
+      toLeft();
+      break;
+    case 'P':
+      parar();
+      break;
+    case 'G':
+      toBack();
+      break;
+    default:
+      break;
+  }
 }
