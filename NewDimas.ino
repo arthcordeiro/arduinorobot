@@ -51,6 +51,8 @@ void setup() {
 
   
   Serial.begin(9600);
+  delay(1000);
+  dht.begin();
 }
 
 void loop() {
@@ -193,6 +195,28 @@ void followBestWay(){
   }else{
     toBack();
   }
+}
+
+void getHumidity(){
+  float humidity = dht.readHumidity();
+  // Mostra os valores lidos, na serial
+  Serial.print("Um. = ");
+  Serial.print(h);
+  Serial.println(" % ");
+  // Nao diminuir muito o valor abaixo
+  // O ideal e a leitura a cada 2 segundos
+  delay(2000);
+}
+
+void getTemp(){
+  float temp = dht.readTemperature();
+  // Mostra os valores lidos, na serial
+  Serial.print("Temp. = ");
+  Serial.print(t);
+  Serial.print(" C ");
+  // Nao diminuir muito o valor abaixo
+  // O ideal e a leitura a cada 2 segundos
+  delay(2000);
 }
 
 void automatico(){
