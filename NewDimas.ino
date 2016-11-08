@@ -1,22 +1,35 @@
+#include <DHT.h>
+#include <DHT_U.h>
 #include <Ultrasonic.h>
+#include <Servo.h>
+
+#define dht_pin  //Pino de controle de dados do DHT
+#define DHTTYPE DHT11
 
 //pinos do Sensor ultrassonico
 
-int triger = //pin trigger
-int echo = //pin echo
+int triger = A2; //pin trigger
+int echo = A3; //pin echo
 
 //pinos dos motores
 
-const int AIA = //pino de controle do motor direito
-const int AIB = //pino de controle do motor direito
-const int BIA = //pino de controle do motor esquerdo
-const int BIB = //pino de controle do motor esquerdo
+const int AIA = 3; //pino de controle do motor direito
+const int AIB = 2; //pino de controle do motor direito
+const int BIA = 5; //pino de controle do motor esquerdo
+const int BIB = 4; //pino de controle do motor esquerdo
 
 //Velocidade
 
 #define VEL_MAX 254
 #define VEL_MIN 120
 #define VEL_MED 187
+
+//Inicializa variável que controla o sensor US e Servo
+
+Ultrasonic us(trigger, echo);
+Servo servoUS;
+
+long dist; //Variável de distância
 
 /*
  A -> Automático
@@ -111,8 +124,25 @@ void toRight(){
   delay(750);
 }
 
+long verificaDist(){
+ dist = us.convert(us.timing(), Ultrasonic::CM);
+ delay(25);
+ return dist;
+}
+
+void reposicionaServo(){
+ servoUS.write(90);
+ delay(200);
+}
+
+
+
 void automatico(){
-  
+ reposicionaServo();
+ if(verificaDist() > 25){
+  andar();
+ }else{
+  parar();
 }
 
 void manual(){
