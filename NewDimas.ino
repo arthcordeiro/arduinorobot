@@ -69,6 +69,8 @@ void loop() {
     default:
       break;
   }*/
+ 
+ automatico();
 
 }
 
