@@ -8,7 +8,7 @@
 
 //pinos do Sensor ultrassonico
 
-int triger = A2; //pin trigger
+int trigger = A2; //pin trigger
 int echo = A3; //pin echo
 
 //pinos dos motores
@@ -36,10 +36,10 @@ long dist; //Variável de distância
  M -> Manual 
  F -> Frente
  P -> Parar
- E -> Esquerda
- D -> Direita
- Gd -> Girar Direita
- Ge -> Girar Esquerda
+ E -> e
+ D -> d
+ Gd -> Girar d
+ Ge -> Girar e
  Gb -> Girar 180°
  */
 
@@ -77,7 +77,7 @@ void loop() {
 void andar(){ //Faz o robo seguir em frente (linha reta)
   analogWrite(AIA, VEL_MAX);
   analogWrite(AIB, LOW);
-  analogWrite(BIA, VEL_MA0);
+  analogWrite(BIA, VEL_MAX);
   analogWrite(BIB, LOW);
 }
 
@@ -137,22 +137,65 @@ void reposicionaServo(){
  delay(200);
 }
 
-int readDir(){
+long readDir(){
  servoUS.write(30);
  delay(200);
- 
-}
-int readEsq(){
- servoUS.write(30);
- delay(200);
- 
-}
-int readFront(){
- reposicionaServo();
- 
- 
+ return verificaDist();
 }
 
+long readEsq(){
+ servoUS.write(30);
+ delay(200);
+ return verificaDist();
+}
+
+long readFront(){
+ reposicionaServo();
+ return verificaDist();
+}
+
+char bestWay(){
+  long e, d, f;
+  char melhorDist  = '0';
+  int maiorDist = 0;
+  e = readEsq();
+  f = readFront();
+  d = readDir();
+
+  if (f > d && f > e){    
+     melhorDist = 'f';    
+     maiorDist = f;    
+   }else   
+   if (d > c && d > e){    
+     melhorDist = 'd';    
+     maiorDist = d;    
+   }else  
+   if (e > c && e > d){    
+     melhorDist = 'e';    
+     maiorDist = e;    
+   }    
+   if (maiorDist <= 25) {    
+     toBack();    
+     followBestWay();    
+   }    
+   reposicionaServo();  
+   return melhorDist;
+}
+
+void followBestWay(){
+  char melhorDist = bestWay();
+  if (melhorDist == 'f') {
+    andar();
+  }else if(melhorDist == 'd'){
+    toRight();
+    andar();
+  }else if (melhorDist == 'e'){
+    toLeft();
+    andar();
+  }else{
+    toBack();
+  }
+}
 
 void automatico(){
  if(verificaDist() > 25){
@@ -167,4 +210,3 @@ void automatico(){
 void manual(){
   
 }
-
