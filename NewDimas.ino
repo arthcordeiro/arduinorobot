@@ -56,7 +56,7 @@ void setup() {
 }
 
 void loop() {
-  unsigned char com;
+/*  unsigned char com;
 
   com = Serial.read();
   switch(com){
@@ -68,7 +68,7 @@ void loop() {
       break;
     default:
       break;
-  }
+  }*/
 
 }
 
@@ -135,14 +135,31 @@ void reposicionaServo(){
  delay(200);
 }
 
+int readDir(){
+ servoUS.write(30);
+ delay(200);
+ 
+}
+int readEsq(){
+ servoUS.write(30);
+ delay(200);
+ 
+}
+int readFront(){
+ reposicionaServo();
+ 
+ 
+}
 
 
 void automatico(){
- reposicionaServo();
  if(verificaDist() > 25){
   andar();
  }else{
   parar();
+  toLeft();
+  automatico();
+ }
 }
 
 void manual(){
